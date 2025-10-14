@@ -1,0 +1,54 @@
+<%- include('../partials/header') %>
+
+<main class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title text-center mb-4">Edit Category</h3>
+
+                    <% if (typeof success !== 'undefined') { %>
+                        <div class="alert alert-success"><%= success %></div>
+                    <% } %>
+                    <% if (typeof error !== 'undefined') { %>
+                        <div class="alert alert-danger"><%= error %></div>
+                    <% } %>
+
+                    <form action="/subcategory/edit/<%= subCategory._id %>" method="POST" enctype="multipart/form-data">
+                        <!-- Category Name -->
+                        <div class="mb-3">
+                            <label for="name" class="form-label">SubCategory Name</label>
+                            <input type="text" class="form-control" id="name" name="name" value="<%= subCategory.name %>" required>
+                        </div>
+
+                        <!-- Current Image Preview -->
+                        <div class="mb-3">
+                            <label class="form-label">Current Image</label>
+                            <div>
+                                <% if (subCategory.image) { %>
+                                    <img src="<%= subCategory.image %>" alt="subCategory Image" class="img-fluid mb-2" style="max-height:150px;">
+                                <% } else { %>
+                                    <p>No image uploaded</p>
+                                <% } %>
+                            </div>
+                        </div>
+
+                        <!-- Upload New Image -->
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Upload New Image</label>
+                            <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-primary">Update SubCategory</button>
+                            <a href="/subcategory/viewSubcategory" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<%- include('../partials/footer') %>

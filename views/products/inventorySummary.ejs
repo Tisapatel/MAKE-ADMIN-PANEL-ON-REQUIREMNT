@@ -1,0 +1,160 @@
+<%- include('../partials/header') %>
+
+<div class="content-wrapper">
+  <div class="container-fluid py-5">
+    <h2 class="text-center mb-5 fw-semibold">Product-wise Inventory</h2>
+
+    <!-- Chart Row -->
+    <div class="row justify-content-center mb-5">
+      <div class="col-12 col-md-8 col-lg-6">
+        <div class="card border-0 shadow rounded-4">
+          <div class="card-body">
+            <h5 class="text-center mb-4 fw-semibold text-secondary">Stock Distribution</h5>
+            <div style="position: relative; width: 100%; height: 300px;">
+              <canvas id="stockChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table Row -->
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-10">
+        <div class="card border-0 shadow rounded-4">
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle text-center mb-0">
+                <thead class="table-light border-bottom border-3 border-primary">
+                  <tr>
+                    <th>Product Name</th>
+                    <th>Category</th>
+                    <th>Subcategory</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if (products.length === 0) { %>
+                    <tr>
+                      <td colspan="6" class="text-muted py-4">No products found</td>
+                    </tr>
+                  <% } else { %>
+                    <% products.forEach(p => { %>
+                      <tr>
+                        <td class="fw-medium"><%= p.name %></td>
+                        <td><%= p.category?.name || '-' %></td>
+                        <td><%= p.subCategory?.name || '-' %></td>
+                        <td>₹ <%= p.price %></td>
+                        <td><%= p.stock %></td>
+                        <td>
+                          <% if (p.stock > 0) { %>
+                            <span class="badge bg-success px-3 py-2">In Stock</span>
+                          <% } else { %>
+                            <span class="badge bg-danger px-3 py-2">Out of Stock</span>
+                          <% } %>
+                        </td>
+                      </tr>
+                    <% }) %>
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('stockChart').getContext('2d');
+  const stockChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['In Stock', 'Out of Stock'],
+      datasets: [{
+        label: 'Products',
+        // data: [<%= inStockCount %>, <%= outOfStockCount %>],
+        backgroundColor: ['#28a745', '#dc3545'],
+        borderColor: '#ffffff',
+        borderWidth: 2,
+        hoverOffset: 10
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            color: '#333',
+            font: { size: 14, family: 'Inter, sans-serif' }
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return context.label + ': ' + context.raw;
+            }
+          }
+        }
+      }
+    }
+  });
+</script>
+
+<%- include('../partials/footer') %>
+
+<style>
+.content-wrapper {
+  margin-left: 250px;
+  background-color: #f8fafc;
+  min-height: 100vh;
+}
+
+@media (max-width: 992px) {
+  .content-wrapper {
+    margin-left: 0;
+    padding: 15px;
+  }
+}
+
+h2 {
+  letter-spacing: 0.5px;
+  color: #1e293b;
+}
+
+.card {
+  background-color: #ffffff;
+  border-radius: 16px;
+}
+
+.table th {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.table td {
+  color: #334155;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #f1f5f9;
+}
+
+.badge {
+  font-size: 0.85rem;
+  border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .table-responsive {
+    overflow-x: auto;
+  }
+}
+</style>

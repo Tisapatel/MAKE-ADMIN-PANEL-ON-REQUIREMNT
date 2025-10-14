@@ -1,0 +1,140 @@
+<%- include('../partials/header') %>
+
+<style>
+  body {
+    background: #f8f9fa;
+  }
+
+  h2 {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #212529;
+  }
+
+  .card {
+    border: none;
+    border-radius: 1rem;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  }
+
+  .table {
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .table thead {
+    background: linear-gradient(90deg, #0dcaf0, #0d6efd);
+    color: #fff;
+    font-size: 15px;
+  }
+
+  .table-hover tbody tr:hover {
+    background-color: rgba(13, 110, 253, 0.08);
+    transition: 0.2s;
+  }
+
+  .badge {
+    font-size: 0.85rem;
+    padding: 6px 12px;
+    border-radius: 12px;
+  }
+</style>
+
+<div class="container-fluid mt-5">
+  <h2 class="text-center mb-4"> Inventory Report</h2>
+
+  <!-- Stock Chart -->
+  <div class="row justify-content-center mb-4">
+    <div class="col-12 col-md-8 col-lg-6">
+      <div class="card p-3 shadow-sm">
+        <h5 class="text-center mb-3 fw-semibold text-secondary">Stock Distribution</h5>
+        <div style="position: relative; height: 300px;">
+          <canvas id="stockChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Inventory Table -->
+  <div class="row justify-content-center" style="margin-left: 270px;">
+    <div class="col-12 col-xl-10">
+      <div class="card p-3 shadow-sm">
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped table-hover align-middle text-center mb-0">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>SKU</th>
+                <th>Category</th>
+                <th>Sub Category</th>
+                <th>Stock</th>
+                <th>Total Purchased</th>
+                <th>Total Sold</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if(report.length === 0){ %>
+                <tr>
+                  <td colspan="8" class="text-muted py-4">No data found</td>
+                </tr>
+              <% } else { %>
+                <% report.forEach(r => { %>
+                  <tr>
+                    <td><%= r.product %></td>
+                    <td><%= r.sku %></td>
+                    <td><%= r.category %></td>
+                    <td><%= r.subCategory %></td>
+                    <td><%= r.stock %></td>
+                    <td><%= r.totalPurchased %></td>
+                    <td><%= r.totalSold %></td>
+                    <td>
+                      <% if(r.isAvailable){ %>
+                        <span class="badge bg-success">In Stock</span>
+                      <% } else { %>
+                        <span class="badge bg-danger">Out of Stock</span>
+                      <% } %>
+                    </td>
+                  </tr>
+                <% }) %>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('stockChart').getContext('2d');
+//   const inStockCount = <%= report.filter(r => r.isAvailable).length %>;
+//   const outOfStockCount = <%= report.filter(r => !r.isAvailable).length %>;
+
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['In Stock', 'Out of Stock'],
+      datasets: [{
+        data: [inStockCount, outOfStockCount],
+        backgroundColor: ['#28a745', '#dc3545'],
+        borderColor: '#fff',
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 14 } } },
+        tooltip: { callbacks: { label: function(ctx){ return ctx.label + ': ' + ctx.raw; } } }
+      }
+    }
+  });
+</script>
+
+<%- include('../partials/footer') %>

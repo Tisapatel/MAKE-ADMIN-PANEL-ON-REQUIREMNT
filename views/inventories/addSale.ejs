@@ -1,0 +1,46 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4"> Add Sale</h2>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card p-4 shadow-sm">
+                <form action="/inventory/sale" method="POST">
+                    <div class="mb-3">
+                        <label for="productId" class="form-label">Product</label>
+                        <select name="productId" id="productId" class="form-select" required>
+                            <% products.forEach(p => { %>
+                                <option value="<%= p._id %>"><%= p.name %> (SKU: <%= p.sku %>) - Stock: <%= p.stock %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label">Quantity</label>
+                        <input type="number" name="quantity" id="quantity" class="form-control" min="1" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="sellingPrice" class="form-label">Selling Price</label>
+                        <input type="number" name="sellingPrice" id="sellingPrice" class="form-control" step="0.01" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="customer" class="form-label">Customer</label>
+                        <input type="text" name="customer" id="customer" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="remarks" class="form-label">Remarks (Optional)</label>
+                        <textarea name="remarks" id="remarks" class="form-control" rows="2"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Add Sale</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

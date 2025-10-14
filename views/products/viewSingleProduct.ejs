@@ -1,0 +1,195 @@
+<%- include('../partials/header') %>
+
+    <div class="page-wrapper" style="min-height:100vh;">
+        <div class="container-fluid mt-5 pt-3">
+            <div class="card shadow-lg border-0">
+                <div class="card-body">
+                    <div class="row align-items-start">
+
+                        <!-- Product Images -->
+                        <div class="col-md-5">
+                            <% if (product.images && product.images.length> 0) { %>
+                                <img src="<%= product.images[0] %>" class="img-fluid rounded shadow-sm main-img"
+                                    alt="Product Image">
+                                <div class="d-flex mt-3 gap-2 flex-wrap">
+                                    <% product.images.forEach(img=> { %>
+                                        <img src="<%= img %>" class="rounded shadow-sm img-thumbnail small-img"
+                                            alt="Thumbnail" style="width:70px; height:70px; object-fit:cover;">
+                                        <% }) %>
+                                </div>
+                                <% } else { %>
+                                    <img src="/assets/images/no-image.jpg" class="img-fluid rounded shadow-sm"
+                                        alt="No Image Available">
+                                    <% } %>
+                        </div>
+
+                        <!-- Product Info -->
+                        <div class="col-md-7">
+                            <h3 class="fw-bold mb-3">
+                                <%= product.name %>
+                            </h3>
+
+                            <table class="table table-bordered table-striped">
+                                <tbody>
+                                    <tr>
+                                        <th width="30%">Product Name</th>
+                                        <td>
+                                            <%= product.name || 'N/A' %>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>Category</th>
+                                        <td>
+                                            <% if (product.category) { %>
+                                                <%= product.category.name %>
+                                                    <% } else { %>
+                                                        N/A
+                                                        <% } %>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>Subcategory</th>
+                                        <td>
+                                            <% if (product.subCategory) { %>
+                                                <%= product.subCategory.name %>
+                                                    <% } else { %>
+                                                        N/A
+                                                        <% } %>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>Price</th>
+                                        <td>₹ <%= product.price ? product.price.toLocaleString() : '0' %>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>Discount</th>
+                                        <td>
+                                            <%= product.discount ? product.discount + '%' : '0%' %>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>Stock</th>
+                                        <td>
+                                            <%= product.stock || 'N/A' %>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>SKU / Product Code</th>
+                                        <td>
+                                            <%= product.sku || 'N/A' %>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>Status</th>
+                                        <td>
+                                            <% if (product.status==='active' ) { %>
+                                                <span class="badge bg-success px-3 py-2">Active</span>
+                                                <% } else { %>
+                                                    <span class="badge bg-danger px-3 py-2">Inactive</span>
+                                                    <% } %>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>Description</th>
+                                        <td>
+                                            <%= product.description || 'No description available.' %>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>Created At</th>
+                                        <td>
+                                            <%= new Date(product.createdAt).toLocaleString() %>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>Updated At</th>
+                                        <td>
+                                            <%= new Date(product.updatedAt).toLocaleString() %>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="d-flex gap-3 mt-4">
+                                <a href="/product/edit/<%= product._id %>" class="btn btn-primary rounded-pill px-4">
+                                    <i class="mdi mdi-pencil"></i> Edit
+                                </a>
+                                <a href="/product/delete/<%= product._id %>" class="btn btn-danger rounded-pill px-4"
+                                    onclick="return confirm('Are you sure you want to delete this product?')">
+                                    <i class="mdi mdi-delete"></i> Delete
+                                </a>
+                                <a href="/product/view" class="btn btn-outline-secondary rounded-pill px-4">
+                                    <i class="mdi mdi-arrow-left"></i> Back
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+
+        <style>
+            .main-img {
+                width: 100%;
+                height: 400px;
+                object-fit: cover;
+                border-radius: 10px;
+            }
+
+            .small-img {
+                cursor: pointer;
+                transition: transform 0.2s ease;
+            }
+
+            .small-img:hover {
+                transform: scale(1.1);
+            }
+
+            .page-wrapper {
+                background-color: #f8f9fa;
+                padding-bottom: 50px;
+            }
+
+            .card-body {
+                padding: 2rem;
+            }
+
+            table th {
+                background: #f1f3f4;
+                font-weight: 600;
+                color: #333;
+            }
+
+            table td {
+                vertical-align: middle;
+            }
+
+            @media (max-width: 768px) {
+                .main-img {
+                    height: 250px;
+                }
+            }
+        </style>
+
+        <script>
+            document.querySelectorAll('.small-img').forEach(img => {
+                img.addEventListener('click', () => {
+                    document.querySelector('.main-img').src = img.src;
+                });
+            });
+        </script>

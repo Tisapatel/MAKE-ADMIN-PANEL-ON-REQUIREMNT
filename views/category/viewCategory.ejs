@@ -1,0 +1,91 @@
+<%- include('../partials/header') %>
+
+<main class="content-wrapper">
+  <div class="container-fluid mt-5 pt-4">
+    <h3 class="mb-4 text-center"> Categories List</h3>
+
+    <% if(categories.length === 0){ %>
+      <div class="alert alert-info text-center">No categories found.</div>
+    <% } else { %>
+      <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered align-middle text-center">
+          <thead class="">
+            <tr>
+              <th style="width:50px;">#</th>
+              <th style="width:80px;">Image</th>
+              <th>Category Name</th>
+              <th style="width:130px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% categories.forEach((category,index)=>{ %>
+              <tr>
+                <td><%= index+1 %></td>
+                <td>
+                  <% if(category.image){ %>
+                    <img src="<%= category.image %>" alt="Category Image" class="category-img">
+                  <% } else { %>
+                    <span class="text-muted">No Image</span>
+                  <% } %>
+                </td>
+                <td><%= category.name %></td>
+                <td>
+                  <a href="/category/edit/<%= category._id %>" class="btn btn-sm btn-warning me-1 mb-1">Edit</a>
+                  <a href="/category/delete/<%= category._id %>" class="btn btn-sm btn-danger mb-1">Delete</a>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    <% } %>
+  </div>
+</main>
+
+<%- include('../partials/footer') %>
+
+<style>
+/* Wrapper for sidebar */
+.content-wrapper {
+  margin-left: 250px;
+  padding: 20px;
+}
+
+@media (max-width: 992px) {
+  .content-wrapper {
+    margin-left: 0;
+    padding: 10px;
+  }
+}
+
+/* Category image styling */
+.table img.category-img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Center content vertically */
+.table th, .table td {
+  vertical-align: middle;
+  text-align: center;
+}
+
+/* Buttons */
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.85rem;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .table img.category-img {
+    width: 50px;
+    height: 50px;
+  }
+  .table-responsive {
+    overflow-x: auto;
+  }
+}
+</style>

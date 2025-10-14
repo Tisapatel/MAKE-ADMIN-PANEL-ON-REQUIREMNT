@@ -1,0 +1,75 @@
+<%- include('../partials/header') %>
+
+<!-- Page Wrapper (Aligns with Matrix Admin Layout) -->
+<div class="page-wrapper" style="min-height:100vh;">
+  <div class="container-fluid mt-4 pt-3">
+
+    <h3 class="text-center mb-4">
+      <i class="mdi mdi-magnify text-primary"></i>
+      Search Results for "<span class="text-primary"><%= query %></span>"
+    </h3>
+
+    <% if (products.length === 0) { %>
+      <div class="alert alert-warning text-center shadow-sm">
+        No products found matching your search.
+      </div>
+    <% } else { %>
+      <div class="row g-4">
+        <% products.forEach(product => { %>
+          <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="card border-0 shadow-sm h-100 hover-card">
+              <% if (product.images && product.images.length > 0) { %>
+                <img src="<%= product.images[0] %>" class="card-img-top rounded-top" style="height:220px; object-fit:cover;">
+              <% } else { %>
+                <img src="/assets/images/no-image.jpg" class="card-img-top rounded-top" style="height:220px; object-fit:cover;">
+              <% } %>
+              <div class="card-body text-center">
+                <h5 class="card-title text-dark fw-bold mb-2"><%= product.name %></h5>
+                <p class="text-muted mb-1">
+                  <i class="mdi mdi-tag-outline"></i> 
+                  <%= product.category ? product.category.name : "Uncategorized" %>
+                </p>
+                <p class="fw-semibold text-success mb-3">₹ <%= product.price.toLocaleString() %></p>
+                <a href="/product/view/<%= product._id %>" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                  <i class="mdi mdi-eye"></i> View
+                </a>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+
+  </div>
+</div>
+
+<%- include('../partials/footer') %>
+
+<style>
+  .hover-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .hover-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+  }
+
+  .card-title {
+    font-size: 1rem;
+  }
+
+  .page-wrapper {
+    background-color: #f8f9fa;
+    padding-bottom: 50px;
+  }
+
+  @media (max-width: 768px) {
+    .card-body {
+      padding: 0.8rem;
+    }
+    .card-title {
+      font-size: 0.95rem;
+    }
+  }
+</style>
